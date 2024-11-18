@@ -30,15 +30,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const title = section.querySelector('.title');
             const nextElements = document.querySelectorAll('.next-elements');
 
-            // Timeline for icon fade-in when the section comes into view
-            const fadeInTimeline = gsap.timeline({
-                scrollTrigger: {
-                    start: () => (i - 0.5) * innerHeight,
-                    end: () => (i + 0.5) * innerHeight,
-                    scrub: true,
-                    onToggle: self => self.isActive && setSection(section),
-                }
-            });
+            let fadeInTimeline;
+            if (i === 0) {
+                // Special ScrollTrigger for the first section
+                fadeInTimeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top top", // Trigger as soon as scrolling starts
+                        end: "bottom top", // Ensure quick fade-out
+                        scrub: true,
+                        onEnter: () => setSection(sections[1]), // Immediately switch to the second section
+                        onLeaveBack: () => setSection(section), // Allow the first section to come back on reverse scroll
+                    }
+                });
+            } else {
+                fadeInTimeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: section,
+                        start: () => (i - 0.5) * innerHeight,
+                        end: () => (i + 0.5) * innerHeight,
+                        scrub: true,
+                        onToggle: (self) => self.isActive && setSection(section),
+                    }
+                });
+            }
 
             fadeInTimeline.fromTo(icons, { opacity: 0, x: 0 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.25 });
 
@@ -384,9 +399,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     function setSection(newSection) {
         if (newSection !== currentSection) {
-            gsap.to(currentSection, { y: -50, autoAlpha: 0, duration: 0.8 });
+            const isFirstSection = currentSection === sections[0];
+    
+            // Immediate fade-out for the first section
+            if (isFirstSection) {
+                gsap.to(currentSection, { autoAlpha: 0, duration: 0.4 });
+            } else {
+                gsap.to(currentSection, { y: -50, autoAlpha: 0, duration: 0.8 });
+            }
+    
             gsap.to(newSection, { y: 0, autoAlpha: 1, duration: 0.8 });
-
+    
             currentSection = newSection;
         }
     }
