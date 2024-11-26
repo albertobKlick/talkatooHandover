@@ -20,7 +20,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const targetDivHeight = 39;
 
         // Adjust the height for the scrollable area
-        gsap.set(".new-homesection", { height: (sections.length * 100 + 100) + "dvh" });
+        // gsap.set(".new-homesection", { height: (sections.length * 100) - 50 + "dvh" });
+        if (isDesktop || isTablet) {
+            gsap.set(".new-homesection", { height: (sections.length * 100) - 50 + "dvh" });
+        } else {
+            gsap.set(".new-homesection", { height: (sections.length * 100) + "dvh" });
+        }
 
         sections.forEach((section, i) => {
             const iconsWrap = section.querySelector('.iconsWrap');
@@ -75,14 +80,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 // Desktop-specific repositioning animations
                 const scrollOutTimeline = gsap.timeline({
                     scrollTrigger: {
-                        start: () => (i + 0) * innerHeight-200,
-                        end: () => (i + 0.1) * innerHeight-200,
-                        // start: () => innerHeight,
-                        // end: () => innerHeight,
-                        // start: "top center",
-                        // end: "bottom center",
+                        start: "13% center",
+                        end: "bottom center",
                         scrub: false, // Keeps animation independent of scroll position
-                        markers: false,
+                        // markers: {startColor: "yellow"},
                         toggleActions: "play none play reverse" // Ensures the animation reverses
                     },
                     delay: 1
@@ -123,8 +124,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (elementsToFadeIn.length) {
                     const fadeInNewElementsTimeline = gsap.timeline({
                         scrollTrigger: {
-                            start: () => (i + 0.1) * innerHeight,
-                            end: () => (i + 0.1) * innerHeight,
+                            start: "13% center",
+                            end: "bottom center",
                             scrub: false,
                             markers: false,
                             toggleActions: "play none play reverse" // Controls the animation states
@@ -148,10 +149,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (elementsToFadeUp.length) {
                 const fadeUpTimeline = gsap.timeline({
                     scrollTrigger: {
-                        start: () => (i + 0) * innerHeight-200,
                         end: () => (i + 0.1) * innerHeight-200,
+                        start: "13% center",
                         scrub: false,
-                        markers: false,
+                        // markers: {startColor: "orange"},
                         toggleActions: "play none play reverse" // Ensures the animation reverses
                     }
                 });
@@ -169,10 +170,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
             // Inner div growth and icon shrinkage animations
             const growDivTimeline = gsap.timeline({
                 scrollTrigger: {
-                    start: () => (i + 0.1) * innerHeight,
-                    end: () => (i + 2.5) * innerHeight,
+                    start: "15% center",
+                    end: "bottom center",
                     scrub: false, // Keeps the animation not tied to scroll
-                    markers: false,
+                    // markers: {startColor: "pink"},
                     toggleActions: "play none play reverse" // Controls the animation states
                 }
             });
@@ -221,10 +222,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (iconsWrap && title) {
                 const fadeOutCurrentAndInNext = gsap.timeline({
                     scrollTrigger: {
-                        start: () => '20%',
+                        start: "15% 35%",
                         end: () => (i + 2.5) * innerHeight,
                         scrub: false,
-                        markers: false,
+                        //markers: {startColor: "purple"},
                         toggleActions: "play none play reverse", // Controls the animation states
                         onUpdate: (self) => {
                             nextElements.forEach(el => {
