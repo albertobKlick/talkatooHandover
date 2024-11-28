@@ -7,6 +7,11 @@
     --pastelPurple: #97ABED;
 }
 
+html, body {
+    overscroll-behavior: none;
+    scroll-behavior: smooth; /* Ensure smooth scrolling */
+}
+
 .new-homesection{
     position: relative;
     overflow-x: hidden;
@@ -216,3 +221,51 @@ section{
 #particles-js.noblur{
     filter: blur(0);
 }
+
+
+
+
+
+
+@media only screen and (max-width: 767px) {
+    .new-homesection{
+        overflow-x: unset;
+    }
+    .sectionScroll{
+        position: relative!important;
+    }
+    .sectionScroll:not(:first-child){
+        opacity: 1;
+        height: 130dvh!important;
+        visibility: visible;
+    }
+    .iconParent{
+        position: absolute;
+        top: 55px;
+    }
+    .sectionScroll:not(:first-child) .title h1,
+    .iconParent h1,
+    .iconsWrap {
+        opacity: 0;
+    }
+    .new-video-section {
+        opacity: 0;
+        transform: translateY("-150px")
+    }
+    .not-clickable {
+        pointer-events: unset;
+    }
+}
+.sectionScroll:first-child{
+    opacity: 0;
+    animation: fadeIn 1.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }

@@ -6,12 +6,262 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     gsap.defaults({ overwrite: 'auto', duration: 1 });
 
+    function resetAnimations() {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        gsap.killTweensOf("*");
+    }
+
+    function belowSections(){
+        const otherElements = document.querySelectorAll('section');
+
+        otherElements.forEach((section, i) => {
+            
+            ScrollTrigger.create({
+                trigger: section,
+                start: "top 92%",
+                end: "bottom 10%",
+                markers: false,
+                onEnter: () => gsap.to(section, { opacity: 1, y: 0, duration: 1 }),
+                onLeaveBack: () => gsap.to(section, { opacity: 0, y: 50, duration: 1 })
+            });
+
+            // AI Image section
+            if (section.classList.contains('content-section-48')) {
+                const darkClouds = section.querySelector('.clouds svg path:nth-child(1)');
+                const darkClouds2 = section.querySelector('.clouds svg path:nth-child(2)');
+
+                const imgbackground = section.querySelector('.bg-img');
+
+                if (darkClouds && darkClouds2) {
+                    const cloudTimeline = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: darkClouds,
+                            start: 'top bottom',
+                            toggleActions: "play none none none",
+                            scrub: true,
+                            markers: false
+                        }
+                    });
+
+                    cloudTimeline.fromTo(darkClouds, { x: -100 }, { x: 0, duration: 1 });
+                    cloudTimeline.fromTo(darkClouds2, { x: 100 }, { x: 0, duration: 1 }, "<0.5");
+                }
+
+                if (imgbackground) {
+                    const imageTimeline = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: imgbackground,
+                            start: "top center", // Start when the top of the container reaches the center of the viewport
+                            end: "bottom 50%",
+                            scrub: true,
+                            markers: false
+                        }
+                    });
+                    imageTimeline.fromTo(imgbackground, { scale: 1.25 }, { scale: 1, duration: 0.5 });
+                }
+            }
+
+            //mobile assistance section
+            if (section.classList.contains('content-section-49')) {
+                const chatBubbles = section.querySelectorAll('.chat-bubbles img');
+                const computerScreenLines = section.querySelectorAll('.computerscreen svg path:nth-child(n+9):nth-child(-n+13)');
+                const computerScreenCursor = section.querySelectorAll('.computerscreen svg path:nth-child(14)');
+
+                // temporary
+                chatBubbles.forEach((img) => {
+                    img.src = img.getAttribute('data-layzy-src');
+                })
+
+                if (chatBubbles.length) {
+                    gsap.timeline({
+                        scrollTrigger: {
+                            trigger: ".chat-bubbles", // Target the container of the images
+                            start: "top 80%", // Start when the top of the container reaches the center of the viewport
+                            end: "bottom 40%", // End when the bottom of the container reaches the top of the viewport
+                            scrub: 0.5, // Smoothly follow the scroll progress
+                            once: true,
+                            markers: false, // Enable markers for debugging (optional)
+                        }
+                    })
+                        .fromTo(chatBubbles,
+                            { opacity: 0, y: 35 }, // Start state
+                            { opacity: 1, y: 0, duration: 0.3, stagger: 0.15 } // End state with stagger
+                        );
+                }
+
+                if (computerScreenLines.length) {
+                    const linesTimeline = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: '.computerscreen',
+                            start: 'top 80%',
+                            end: 'top 30%',
+                            scrub: true,
+                            markers: false,
+                            once: true //set to true after
+                        }
+                    });
+
+                    linesTimeline.fromTo(
+                        computerScreenLines,
+                        { scale: 0, transformOrigin: "left center" },
+                        {
+                            scale: 1,
+                            duration: 1,
+                            stagger: 0.2,
+                        }
+                    );
+                    gsap.set(computerScreenCursor, { opacity: 0 });
+
+                }
+            }
+
+            //signature section
+            if (section.classList.contains('content-section-50')) {
+                const svgsig = section.querySelector('.signature svg path');
+
+                const pathLength = svgsig.getTotalLength();
+
+                gsap.set(svgsig, {
+                    strokeDasharray: pathLength, // Make the dash length equal to the path length
+                    strokeDashoffset: pathLength, // Offset the dash to "hide" the path
+                    stroke: "white",
+                    shapeRendering: "geometricPrecision"
+                });
+
+                // Animate the path
+                gsap.timeline({
+                    scrollTrigger: {
+                        trigger: ".signature",
+                        start: "top 80%", // Start animation when SVG is 80% into the viewport
+                        end: "top 20%",  // End when the SVG is 20% into the viewport
+                        // scrub: 0.5,
+                        once: true,    // Smoothly tie animation to scroll
+                        markers: false   // Debugging markers (optional)
+                    }
+                }).to(svgsig, {
+                    strokeDashoffset: 0, // Draw the path by reducing the offset to 0
+                    duration: 1.5, // Adjust this for the speed of the effect
+                    ease: "power1.inOut" // Smoother easing
+                });
+            }
+
+            //demo section
+            if (section.classList.contains('content-section-51')) {
+                
+                const cloudsBirdsPaths = section.querySelector('.clouds');
+                const cloudsTrigger = (innerWidth > 1400 ) ? cloudsBirdsPaths : section.querySelector('h2');
+                const firstCloud = section.querySelectorAll('.clouds svg path:nth-child(1)');
+                const cloudPaths = section.querySelectorAll('.clouds svg path:nth-child(n+2):nth-child(-n+6)');
+                const birdsPaths = section.querySelectorAll('.clouds svg path:nth-child(n+6):nth-child(-n+8)');
+                const birdsPaths2 = section.querySelectorAll('.clouds svg path:nth-child(n+9)');
+
+                if (cloudPaths && birdsPaths) {
+                    const cloudBirdsTimeline = gsap.timeline({
+                        scrollTrigger: {
+                            trigger: cloudsTrigger,
+                            start: "top 40%", // Start animation when SVG is 80% into the viewport
+                            end: "bottom 40%",  // End when the SVG is 20% into the viewport
+                            scrub: true,
+                            markers: false,
+                        }
+                    });
+
+                    cloudBirdsTimeline.fromTo(firstCloud, { x: -70, opacity:0 }, { x: 0, opacity: 1, duration: 1.5 });
+                    cloudBirdsTimeline.fromTo(cloudPaths, { x: 70, opacity:0 }, { x: 0, opacity: 1, duration: 2 }, "<0.5" );
+                    cloudBirdsTimeline.fromTo(birdsPaths, { x: -200, y: 175, opacity:0 }, { opacity: 1, x: 0, y: 0, duration: 2, delay: 0.12 }, "<0.5");
+                    cloudBirdsTimeline.fromTo(birdsPaths2, { x: -200, y: 175, opacity:0 }, { opacity: 1, x: 0, y: 0, duration: 2 }, "<0.5");
+                }
+            }
+        });
+    }
+
+    function initMobileAnimations() {
+            
+        resetAnimations();
+    
+        const iconsWrap = sections[1].querySelector('.iconsWrap');
+        const icons = sections[1].querySelectorAll('.iconel');
+        const sectionTitles = sections[1].querySelectorAll('h1');
+    
+        // Fade in section title
+        gsap.to(".iconParent h1", {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power1.out",
+            scrollTrigger: {
+                trigger: sections[1],
+                start: "top 75%",
+                end: "top 50%",
+                once: true, // Ensures it runs only once
+                //markers: { startColor: 'yellow' },
+                toggleActions: "play none none none"
+            }
+        });
+    
+        // Icons fade-in and animation timeline
+        const iconsFadeInTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: iconsWrap, // Use iconsWrap for better separation
+                start: "top center",
+                end: "bottom bottom",
+                once: true, // Ensure the animation runs only once
+                //markers: { startColor: "blue" },
+            }
+        });
+    
+        iconsFadeInTimeline
+            .to(iconsWrap, { opacity: 1, duration: 0.5 })
+            .to(icons, { opacity: 1, duration: 0.5, stagger: 0.25 })
+            .to(".iconParent h1", { opacity: 0, duration: 0.5, delay: 0.5 }) // Only if necessary
+            .to(sectionTitles[0], { opacity: 1, duration: 0.5 });
+    
+        // Grow div animation
+        const growDivTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: iconsWrap,
+                start: "25% center",
+                end: "bottom center",
+                scrub: false,
+                once: true,
+                //markers: { startColor: "orange" },
+            }
+        });
+    
+        growDivTimeline
+            .to('.iconel img', {
+                opacity: 0,
+                duration: 1,
+                height: 50
+            })
+            .to('.iconel .rectangle', {
+                width: window.innerWidth - 30,
+                height: '36px',
+                opacity: 1,
+                borderRadius: 0,
+                duration: 1,
+                ease: "power1.out"
+            }, "<");
+    
+        // Video section animation
+        const videoSectionTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: '.new-video-section',
+                start: 'top center',
+                end: 'bottom bottom',
+                once: true,
+                //markers: { startColor: 'pink' }
+            }
+        });
+    
+        videoSectionTimeline.to('.new-video-section', { opacity: 1, duration: 1, y: 50, delay: 0.5 });
+    
+        // Ensure any additional animations are run cleanly
+        belowSections();
+    }
     
 
     function initAnimations() {
-        // Clear existing ScrollTriggers and animations
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        gsap.killTweensOf("*");
+        resetAnimations();
 
         // Define target width and height for the inner div based on responsive check
         const isTablet = window.innerWidth >= 728 && window.innerWidth < 1024;
@@ -270,168 +520,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
             }
         });
 
-        const otherElements = document.querySelectorAll('section');
-
-    otherElements.forEach((section, i) => {
-        
-        ScrollTrigger.create({
-            trigger: section,
-            start: "top 75%",
-            end: "bottom 10%",
-            markers: false,
-            onEnter: () => gsap.to(section, { opacity: 1, y: 0, duration: 1 }),
-            onLeaveBack: () => gsap.to(section, { opacity: 0, y: 50, duration: 1 })
-        });
-
-        // AI Image section
-        if (section.classList.contains('content-section-48')) {
-            const darkClouds = section.querySelector('.clouds svg path:nth-child(1)');
-            const darkClouds2 = section.querySelector('.clouds svg path:nth-child(2)');
-
-            const imgbackground = section.querySelector('.bg-img');
-
-            if (darkClouds && darkClouds2) {
-                const cloudTimeline = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: darkClouds,
-                        start: 'top bottom',
-                        toggleActions: "play none none none",
-                        scrub: true,
-                        markers: false
-                    }
-                });
-
-                cloudTimeline.fromTo(darkClouds, { x: -100 }, { x: 0, duration: 1 });
-                cloudTimeline.fromTo(darkClouds2, { x: 100 }, { x: 0, duration: 1 }, "<0.5");
-            }
-
-            if (imgbackground) {
-                const imageTimeline = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: imgbackground,
-                        start: "top center", // Start when the top of the container reaches the center of the viewport
-                        end: "bottom 50%",
-                        scrub: true,
-                        markers: false
-                    }
-                });
-                imageTimeline.fromTo(imgbackground, { scale: 1.25 }, { scale: 1, duration: 0.5 });
-            }
-        }
-
-        //mobile assistance section
-        if (section.classList.contains('content-section-49')) {
-            const chatBubbles = section.querySelectorAll('.chat-bubbles img');
-            const computerScreenLines = section.querySelectorAll('.computerscreen svg path:nth-child(n+9):nth-child(-n+13)');
-            const computerScreenCursor = section.querySelectorAll('.computerscreen svg path:nth-child(14)');
-
-            // temporary
-            chatBubbles.forEach((img) => {
-                img.src = img.getAttribute('data-layzy-src');
-            })
-
-            if (chatBubbles.length) {
-                gsap.timeline({
-                    scrollTrigger: {
-                        trigger: ".chat-bubbles", // Target the container of the images
-                        start: "top 80%", // Start when the top of the container reaches the center of the viewport
-                        end: "bottom 40%", // End when the bottom of the container reaches the top of the viewport
-                        scrub: 0.5, // Smoothly follow the scroll progress
-                        once: true,
-                        markers: false, // Enable markers for debugging (optional)
-                    }
-                })
-                    .fromTo(chatBubbles,
-                        { opacity: 0, y: 35 }, // Start state
-                        { opacity: 1, y: 0, duration: 0.3, stagger: 0.15 } // End state with stagger
-                    );
-            }
-
-            if (computerScreenLines.length) {
-                const linesTimeline = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: '.computerscreen',
-                        start: 'top 80%',
-                        end: 'top 30%',
-                        scrub: true,
-                        markers: false,
-                        once: true //set to true after
-                    }
-                });
-
-                linesTimeline.fromTo(
-                    computerScreenLines,
-                    { scale: 0, transformOrigin: "left center" },
-                    {
-                        scale: 1,
-                        duration: 1,
-                        stagger: 0.2,
-                    }
-                );
-                gsap.set(computerScreenCursor, { opacity: 0 });
-
-            }
-        }
-
-        //signature section
-        if (section.classList.contains('content-section-50')) {
-            const svgsig = section.querySelector('.signature svg path');
-
-            const pathLength = svgsig.getTotalLength();
-
-            gsap.set(svgsig, {
-                strokeDasharray: pathLength, // Make the dash length equal to the path length
-                strokeDashoffset: pathLength, // Offset the dash to "hide" the path
-                stroke: "white",
-                shapeRendering: "geometricPrecision"
-            });
-
-            // Animate the path
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: ".signature",
-                    start: "top 80%", // Start animation when SVG is 80% into the viewport
-                    end: "top 20%",  // End when the SVG is 20% into the viewport
-                    // scrub: 0.5,
-                    once: true,    // Smoothly tie animation to scroll
-                    markers: false   // Debugging markers (optional)
-                }
-            }).to(svgsig, {
-                strokeDashoffset: 0, // Draw the path by reducing the offset to 0
-                duration: 1.5, // Adjust this for the speed of the effect
-                ease: "power1.inOut" // Smoother easing
-            });
-        }
-
-        //demo section
-        if (section.classList.contains('content-section-51')) {
-            
-            const cloudsBirdsPaths = section.querySelector('.clouds');
-            const cloudsTrigger = (innerWidth > 1400 ) ? cloudsBirdsPaths : section.querySelector('h2');
-            const firstCloud = section.querySelectorAll('.clouds svg path:nth-child(1)');
-            const cloudPaths = section.querySelectorAll('.clouds svg path:nth-child(n+2):nth-child(-n+6)');
-            const birdsPaths = section.querySelectorAll('.clouds svg path:nth-child(n+6):nth-child(-n+8)');
-            const birdsPaths2 = section.querySelectorAll('.clouds svg path:nth-child(n+9)');
-
-            if (cloudPaths && birdsPaths) {
-                const cloudBirdsTimeline = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: cloudsTrigger,
-                        start: "top 40%", // Start animation when SVG is 80% into the viewport
-                        end: "bottom 40%",  // End when the SVG is 20% into the viewport
-                        scrub: true,
-                        markers: false,
-                    }
-                });
-
-                cloudBirdsTimeline.fromTo(firstCloud, { x: -70, opacity:0 }, { x: 0, opacity: 1, duration: 1.5 });
-                cloudBirdsTimeline.fromTo(cloudPaths, { x: 70, opacity:0 }, { x: 0, opacity: 1, duration: 2 }, "<0.5" );
-                cloudBirdsTimeline.fromTo(birdsPaths, { x: -200, y: 175, opacity:0 }, { opacity: 1, x: 0, y: 0, duration: 2, delay: 0.12 }, "<0.5");
-                cloudBirdsTimeline.fromTo(birdsPaths2, { x: -200, y: 175, opacity:0 }, { opacity: 1, x: 0, y: 0, duration: 2 }, "<0.5");
-            }
-        }
-    });
+        belowSections();
     }
+        
 
     function setSection(newSection) {
         if (newSection !== currentSection) {
@@ -451,10 +542,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     // Initialize animations on load
-    initAnimations();
+    //initAnimations();
+
     
+    
+    function setAnimations (width) {
+        if (width >= 768) {
+            initAnimations();
+        } else {
+            initMobileAnimations();
+        }
+    }
+
+    // initial
+    setAnimations(window.innerWidth);
 
     // Reinitialize animations on window resize for responsiveness
-    window.addEventListener("resize", initAnimations);
+    //window.addEventListener("resize", initAnimations);
+    let resizeTimeout;
+    window.addEventListener("resize", function () {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => setAnimations(window.innerWidth), 200);
+    });
 
 });
