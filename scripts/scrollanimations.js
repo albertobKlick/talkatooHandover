@@ -182,7 +182,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const iconsWrap = sections[1].querySelector('.iconsWrap');
         const icons = sections[1].querySelectorAll('.iconel');
         const sectionTitles = sections[1].querySelectorAll('h1');
-    
+        
+        const phoneImg = sections[1].querySelectorAll('.new-video-section + div');
+        
         // Fade in section title
         gsap.to(".iconParent h1", {
             opacity: 1,
@@ -210,37 +212,70 @@ document.addEventListener("DOMContentLoaded", (event) => {
         });
     
         iconsFadeInTimeline
+            .to(phoneImg, {opacity: 0, duration: 0.5})
             .to(iconsWrap, { opacity: 1, duration: 0.5 })
             .to(icons, { opacity: 1, duration: 0.5, stagger: 0.25 })
             .to(".iconParent h1", { opacity: 0, duration: 0.5, delay: 0.5 }) // Only if necessary
             .to(sectionTitles[0], { opacity: 1, duration: 0.5 });
-    
-        // Grow div animation
-        const growDivTimeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: iconsWrap,
-                start: "25% center",
-                end: "bottom center",
-                scrub: false,
-                once: true,
-                //markers: { startColor: "orange" },
+
+        
+        ScrollTrigger.matchMedia({
+            // For devices between 728px and 1200px
+            "(min-width: 728px) and (max-width: 1200px)": function() {
+                let growDivTimeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: iconsWrap,
+                        start: "25% center",
+                        end: "bottom center",
+                        scrub: false,
+                        once: true,
+                        //markers: { startColor: "orange" },
+                    }
+                });
+                growDivTimeline
+                    .to('.iconel img', {
+                        opacity: 0,
+                        duration: 1,
+                        height: 50
+                    })
+                    .to('.iconel .rectangle', {
+                        width: '133px',
+                        height: '36px',
+                        opacity: 1,
+                        borderRadius: 0,
+                        duration: 1,
+                        ease: "power1.out"
+                    }, "<");
+            },
+        
+            // For devices below 728px
+            "(max-width: 727px)": function() {
+                let growDivTimeline = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: iconsWrap,
+                        start: "25% center",
+                        end: "bottom center",
+                        scrub: false,
+                        once: true,
+                        //markers: { startColor: "orange" },
+                    }
+                });
+                growDivTimeline
+                    .to('.iconel img', {
+                        opacity: 0,
+                        duration: 1,
+                        height: 50 // Adjust height for smaller screens
+                    })
+                    .to('.iconel .rectangle', {
+                        width: window.innerWidth - 30, // Adjust width
+                        height: '36px', // Adjust height
+                        opacity: 1,
+                        borderRadius: 5, // Adjust border-radius
+                        duration: 1,
+                        ease: "power1.out"
+                    }, "<");
             }
         });
-    
-        growDivTimeline
-            .to('.iconel img', {
-                opacity: 0,
-                duration: 1,
-                height: 50
-            })
-            .to('.iconel .rectangle', {
-                width: window.innerWidth - 30,
-                height: '36px',
-                opacity: 1,
-                borderRadius: 0,
-                duration: 1,
-                ease: "power1.out"
-            }, "<");
     
         // Video section animation
         const videoSectionTimeline = gsap.timeline({
@@ -547,7 +582,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
     
     function setAnimations (width) {
-        if (width >= 768) {
+        if (width >= 1200) {
             initAnimations();
         } else {
             initMobileAnimations();

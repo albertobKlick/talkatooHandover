@@ -225,9 +225,17 @@ section{
 
 
 
-
-
-@media only screen and (max-width: 767px) {
+@media only screen and (min-width: 320px) and (max-width: 1079px) {
+    .iconParent{
+        top: 55px;
+    }
+}
+@media only screen and (min-width: 1080px) and (max-width: 1199px) {
+    .iconParent{
+        top: -260px;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 1199px) {
     .new-homesection{
         overflow-x: unset;
     }
@@ -241,7 +249,7 @@ section{
     }
     .iconParent{
         position: absolute;
-        top: 55px;
+        /* top: 55px; */
     }
     .sectionScroll:not(:first-child) .title h1,
     .iconParent h1,
@@ -269,3 +277,20 @@ section{
       opacity: 1;
     }
   }
+
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+
+    .new-video-section + div {
+        position: absolute;
+        top: 55px;
+        left: 8%;
+    }
+    .fullscreen-section {
+        height: 50dvh;
+    }
+    .iconsWrap {
+        justify-content: center!important;
+        /* flex-direction: column!important; */
+    }
+}
