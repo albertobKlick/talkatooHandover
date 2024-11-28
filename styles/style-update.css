@@ -226,41 +226,37 @@ section{
 
 
 @media only screen and (min-width: 320px) and (max-width: 1079px) {
-    .iconParent{
+    body.istouch .iconParent{
         top: 55px;
     }
 }
-@media only screen and (min-width: 1080px) and (max-width: 1199px) {
-    .iconParent{
-        top: -260px;
-    }
-}
+
 @media only screen and (min-width: 320px) and (max-width: 1199px) {
-    .new-homesection{
+    body.istouch .new-homesection{
         overflow-x: unset;
     }
-    .sectionScroll{
+    body.istouch .sectionScroll{
         position: relative!important;
     }
-    .sectionScroll:not(:first-child){
+    body.istouch .sectionScroll:not(:first-child){
         opacity: 1;
         height: 130dvh!important;
         visibility: visible;
     }
-    .iconParent{
+    body.istouch .iconParent{
         position: absolute;
         /* top: 55px; */
     }
-    .sectionScroll:not(:first-child) .title h1,
-    .iconParent h1,
-    .iconsWrap {
+    body.istouch .sectionScroll:not(:first-child) .title h1,
+    body.istouch .iconParent h1,
+    body.istouch .iconsWrap {
         opacity: 0;
     }
-    .new-video-section {
+    body.istouch .new-video-section {
         opacity: 0;
         transform: translateY("-150px")
     }
-    .not-clickable {
+    body.istouch .not-clickable {
         pointer-events: unset;
     }
 }
@@ -271,25 +267,30 @@ section{
 
 @keyframes fadeIn {
     from {
-      opacity: 0;
+        opacity: 0;
     }
     to {
-      opacity: 1;
+        opacity: 1;
     }
-  }
+}
 
+@media only screen and (min-width: 1024px) and (max-width: 1199px) {
+    body.istouch .iconParent{
+        top: -60px;
+    }
+}
 
 @media only screen and (min-width: 768px) and (max-width: 1199px) {
 
-    .new-video-section + div {
+    body.istouch .new-video-section + div {
         position: absolute;
         top: 55px;
         left: 8%;
     }
-    .fullscreen-section {
+    body.istouch .fullscreen-section {
         height: 50dvh;
     }
-    .iconsWrap {
+    body.istouch .iconsWrap {
         justify-content: center!important;
         /* flex-direction: column!important; */
     }

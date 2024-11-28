@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const videoSectionTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: '.new-video-section',
-                start: 'top center',
+                start: window.innerWidth < 768 ? 'top center' : 'top 75%',
                 end: 'bottom bottom',
                 once: true,
                 //markers: { startColor: 'pink' }
@@ -579,12 +579,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // Initialize animations on load
     //initAnimations();
 
-    
+    function isTouchEnabled() {
+        return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+      }
+      
+    let isTouch;
     
     function setAnimations (width) {
-        if (width >= 1200) {
+        isTouch = isTouchEnabled();
+        if (!isTouch) {
+            document.body.classList.remove('istouch');
             initAnimations();
         } else {
+            document.body.classList.add('istouch');
             initMobileAnimations();
         }
     }
