@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             ease: "power1.out",
             scrollTrigger: {
                 trigger: sections[1],
-                start: "top 75%",
+                start: "top 80%",
                 end: "top 50%",
                 once: true, // Ensures it runs only once
                 //markers: { startColor: 'yellow' },
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const iconsFadeInTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: iconsWrap, // Use iconsWrap for better separation
-                start: "top center",
+                start: "top 87.5%",
                 end: "bottom bottom",
                 once: true, // Ensure the animation runs only once
                 //markers: { startColor: "blue" },
@@ -213,9 +213,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     
         iconsFadeInTimeline
             .to(phoneImg, {opacity: 0, duration: 0.5})
-            .to(iconsWrap, { opacity: 1, duration: 0.5 })
-            .to(icons, { opacity: 1, duration: 0.5, stagger: 0.25 })
-            .to(".iconParent h1", { opacity: 0, duration: 0.5, delay: 0.5 }) // Only if necessary
+            .to(iconsWrap, { opacity: 1, duration: 0.2 })
+            .to(icons, { opacity: 1, duration: 0.25, stagger: 0.1 })
+            .to(".iconParent h1", { opacity: 0, duration: 0.5 }) // Only if necessary
             .to(sectionTitles[0], { opacity: 1, duration: 0.5 });
 
         
@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 let growDivTimeline = gsap.timeline({
                     scrollTrigger: {
                         trigger: iconsWrap,
-                        start: "25% center",
+                        start: "25% 80%",
                         end: "bottom center",
                         scrub: false,
                         once: true,
@@ -281,14 +281,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const videoSectionTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: '.new-video-section',
-                start: window.innerWidth < 768 ? 'top center' : 'top 75%',
+                start: window.innerWidth < 768 ? 'top 78%' : 'top 75%',
                 end: 'bottom bottom',
                 once: true,
                 //markers: { startColor: 'pink' }
             }
         });
     
-        videoSectionTimeline.to('.new-video-section', { opacity: 1, duration: 1, y: 50, delay: 0.5 });
+        videoSectionTimeline.to('.new-video-section', { opacity: 1, duration: 1, y: 50 });
     
         // Ensure any additional animations are run cleanly
         belowSections();
