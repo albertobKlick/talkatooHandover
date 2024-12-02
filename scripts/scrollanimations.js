@@ -294,6 +294,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         belowSections();
     }
     
+    let isAnimating = false; 
 
     function initAnimations() {
         resetAnimations();
@@ -306,11 +307,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         // Adjust the height for the scrollable area
         // gsap.set(".new-homesection", { height: (sections.length * 100) - 50 + "dvh" });
-        if (isDesktop || isTablet) {
-            gsap.set(".new-homesection", { height: (sections.length * 100) - 50 + "dvh" });
-        } else {
-            gsap.set(".new-homesection", { height: (sections.length * 100) + "dvh" });
-        }
+        gsap.set(".new-homesection", { height: (sections.length * 100) + 50 + "dvh" });
 
         sections.forEach((section, i) => {
             const iconsWrap = section.querySelector('.iconsWrap');
@@ -337,10 +334,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 fadeInTimeline = gsap.timeline({
                     scrollTrigger: {
                         trigger: section,
-                        start: () => (i - 0.5) * innerHeight,
-                        end: () => (i + 0.5) * innerHeight,
+                        start: "top top", // Trigger as soon as scrolling starts
+                        end: "bottom top", // Ensure quick fade-out
                         // scrub: true,
-                        //markers: true,
+                        //markers: {startColor: 'yellow'},
                         onToggle: (self) => self.isActive && setSection(section),
                     }
                 });
@@ -349,11 +346,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const iconsFadeInTimeline = gsap.timeline({
                 scrollTrigger: {
                     trigger:iconsWrap,
-                    start: "top center",
-                    end: "bottom top",
-                    // once: true,
-                    markers: false,
-                    toggleActions: "play none play reverse" // Ensures the animation reverses
+                    start: "13% center",
+                    end: "15% top",
+                    once: true,
+                    //markers: {startColor: 'blue'},
+                    //toggleActions: "play none play reverse",
+                    onEnter: () => {
+                        if (!isAnimating) {
+                            document.body.classList.add('overflowscroll');
+                            isAnimating = true;
+                            iconsFadeInTimeline.eventCallback("onComplete", () => {
+                                isAnimating = false;
+                                document.body.classList.remove('overflowscroll');
+                            });
+                        }
+                    }
                 }
             });
             
@@ -365,21 +372,41 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 // Desktop-specific repositioning animations
                 const scrollOutTimeline = gsap.timeline({
                     scrollTrigger: {
-                        start: "13% center",
-                        end: "bottom center",
+                        start: "13% 40%",
+                        end: "21% center",
                         scrub: false, // Keeps animation independent of scroll position
-                        // markers: {startColor: "yellow"},
-                        toggleActions: "play none play reverse" // Ensures the animation reverses
+                        //markers: {startColor: "orange"},
+                        toggleActions: "play none play reverse",
+                        onEnter: () => {
+                            if (!isAnimating) {
+                                isAnimating = true;
+                                scrollOutTimeline.eventCallback("onComplete", () => {
+                                    isAnimating = false;
+                                });
+                            }
+                        }
                     },
-                    delay: 1
+                    // delay: 1
                 });
-            
-                scrollOutTimeline.to(icons, {
+                scrollOutTimeline.fromTo(elementsToFadeUp, {
+                    opacity: 1,
+                    y: 0,
+                }, {
+                    opacity: 0,
+                    y: -50,
+                    duration: 0.5,
+                });
+
+                scrollOutTimeline.fromTo(icons, {
+                    x: 0,
+                    y: 0,
+                    transformOrigin: "center center",
+                } ,{
                     x: (index) => `-${index * 133}px`,
                     y: (index) => `${index * 100 - 200 + 60}px`,
                     scale: 1,
                     transformOrigin: "center center",
-                    duration: 1,
+                    duration: 0.7,
                     stagger: 0.1
                 });
             
@@ -391,7 +418,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         return `${Math.max(xvalue, minValue)}px`;
                     },
                     width: '533px',
-                    duration: 1,
+                    duration: 0.7,
                     ease: "power1.inOut"
                 }, 0);
 
@@ -401,18 +428,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 }, {
                     opacity: 1,
                     y: 0,
-                    duration: 1,
+                    duration: 0.7,
                     stagger: 0.1
                 });
+
+                
+
             } else {
                 // Fade-in effect on elements with .fade-in class
                 if (elementsToFadeIn.length) {
                     const fadeInNewElementsTimeline = gsap.timeline({
                         scrollTrigger: {
-                            start: "13% center",
-                            end: "bottom center",
+                            start: "13% 45%",
+                            end: "21% center",
                             scrub: false,
-                            markers: false,
+                            // markers: false,
                             toggleActions: "play none play reverse" // Controls the animation states
                         }
                     });
@@ -427,39 +457,24 @@ document.addEventListener("DOMContentLoaded", (event) => {
                         stagger: 0.1
                     });
                 }
-            }
-            
-
-            // Fade-up animation for elements with .fade-up class
-            if (elementsToFadeUp.length) {
-                const fadeUpTimeline = gsap.timeline({
-                    scrollTrigger: {
-                        end: () => (i + 0.1) * innerHeight-200,
-                        start: "13% center",
-                        scrub: false,
-                        // markers: {startColor: "orange"},
-                        toggleActions: "play none play reverse" // Ensures the animation reverses
-                    }
-                });
-
-                fadeUpTimeline.to(elementsToFadeUp, {
-                    y: -50,
-                    opacity: 0,
-                    duration: 1,
-                    stagger: 0.1
-                });
-            }
-
-            
+            }           
 
             // Inner div growth and icon shrinkage animations
             const growDivTimeline = gsap.timeline({
                 scrollTrigger: {
-                    start: "15% center",
-                    end: "bottom center",
+                    start: "15% 30%",
+                    end: "21% center",
                     scrub: false, // Keeps the animation not tied to scroll
-                    // markers: {startColor: "pink"},
-                    toggleActions: "play none play reverse" // Controls the animation states
+                    //markers: {startColor: "pink"},
+                    toggleActions: "play none play reverse",
+                    onEnter: () => {
+                        if (!isAnimating) {
+                            isAnimating = true;
+                            growDivTimeline.eventCallback("onComplete", () => {
+                                isAnimating = false;
+                            });
+                        }
+                    }
                 }
             });
             
@@ -473,7 +488,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     growDivTimeline.to(innerDiv, {
                         width: targetDivWidth,
                         height: targetDivHeight,
-                        duration: 1,
+                        duration: 0.7,
                         opacity: 1,
                         borderRadius: 0,
                         ease: "power1.inOut"
@@ -489,7 +504,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     if (isDesktop || isTablet) {
                         growDivTimeline.to(icon, {
                             y: `${index * 70 - 150}px`,
-                            duration: 1,
+                            duration: 0.7,
                             ease: "power1.inOut"
                         }, index * 0.15);
                     } else {
@@ -507,19 +522,28 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (iconsWrap && title) {
                 const fadeOutCurrentAndInNext = gsap.timeline({
                     scrollTrigger: {
-                        start: "15% 35%",
-                        end: () => (i + 2.5) * innerHeight,
+                        start: "18% 15%",
+                        // end: () => (i + 2.5) * innerHeight,
+                        end: "21% center",
                         scrub: false,
                         //markers: {startColor: "purple"},
                         toggleActions: "play none play reverse", // Controls the animation states
                         onUpdate: (self) => {
                             nextElements.forEach(el => {
-                                if (self.progress >= 0.65 && el.classList.contains("not-clickable")) {
+                                if (self.progress > 0 && el.classList.contains("not-clickable")) {
                                     el.classList.remove("not-clickable");
-                                } else if (self.progress < 0.65 && !el.classList.contains("partially-visible")) {
+                                } else if (self.progress <= 0 && !el.classList.contains("partially-visible")) {
                                     el.classList.add("not-clickable");
                                 }
                             });
+                        },
+                        onEnter: () => {
+                            if (!isAnimating) {
+                                isAnimating = true;
+                                fadeOutCurrentAndInNext.eventCallback("onComplete", () => {
+                                    isAnimating = false;
+                                });
+                            }
                         }
                     }
                 });
@@ -569,7 +593,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             } else {
                 gsap.to(currentSection, { y: -50, autoAlpha: 0, duration: 0.8 });
             }
-    
+
             gsap.to(newSection, { y: 0, autoAlpha: 1, duration: 0.8 });
     
             currentSection = newSection;
