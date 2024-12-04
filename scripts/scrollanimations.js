@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const phoneImg = sections[1].querySelectorAll('.new-video-section + div');
         
         // Fade in section title
-        gsap.to(".iconParent h1", {
+        gsap.to(".iconParent", {
             opacity: 1,
             duration: 1.5,
             ease: "power1.out",

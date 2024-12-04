@@ -248,7 +248,7 @@ section{
         /* top: 55px; */
     }
     body.istouch .sectionScroll:not(:first-child) .title h1,
-    body.istouch .iconParent h1,
+    body.istouch .iconParent,
     body.istouch .iconsWrap {
         opacity: 0;
     }
