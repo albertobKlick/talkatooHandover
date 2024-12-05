@@ -372,8 +372,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 // Desktop-specific repositioning animations
                 const scrollOutTimeline = gsap.timeline({
                     scrollTrigger: {
-                        start: "13% 40%",
-                        end: "21% center",
+                        start: "15% 40%",
+                        end: "20% center",
                         scrub: false, // Keeps animation independent of scroll position
                         //markers: {startColor: "orange"},
                         toggleActions: "play none play reverse",
@@ -462,8 +462,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
             // Inner div growth and icon shrinkage animations
             const growDivTimeline = gsap.timeline({
                 scrollTrigger: {
-                    start: "15% 30%",
-                    end: "21% center",
+                    start: "20% 25%",
+                    end: "25% center",
                     scrub: false, // Keeps the animation not tied to scroll
                     //markers: {startColor: "pink"},
                     toggleActions: "play none play reverse",
@@ -522,9 +522,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
             if (iconsWrap && title) {
                 const fadeOutCurrentAndInNext = gsap.timeline({
                     scrollTrigger: {
-                        start: "18% 15%",
+                        start: "25% 10%",
                         // end: () => (i + 2.5) * innerHeight,
-                        end: "21% center",
+                        end: "30% center",
                         scrub: false,
                         //markers: {startColor: "purple"},
                         toggleActions: "play none play reverse", // Controls the animation states
