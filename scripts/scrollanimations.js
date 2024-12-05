@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         // Adjust the height for the scrollable area
         // gsap.set(".new-homesection", { height: (sections.length * 100) - 50 + "dvh" });
-        gsap.set(".new-homesection", { height: (sections.length * 100) + 50 + "dvh" });
+        gsap.set(".new-homesection", { height: (sections.length * 100) + 100 + "dvh" });
 
         sections.forEach((section, i) => {
             const iconsWrap = section.querySelector('.iconsWrap');
