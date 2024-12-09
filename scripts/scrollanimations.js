@@ -304,10 +304,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const isDesktop = window.innerWidth >= 1024;
         const targetDivWidth = (isDesktop || isTablet) ? 625 : window.innerWidth - 30;
         const targetDivHeight = 39;
+        const viewHeight = isDesktop ? 150 : 200;
 
         // Adjust the height for the scrollable area
         // gsap.set(".new-homesection", { height: (sections.length * 100) - 50 + "dvh" });
-        gsap.set(".new-homesection", { height: (sections.length * 100) + 100 + "dvh" });
+        gsap.set(".new-homesection", { height: (sections.length * 100) + viewHeight + "dvh" });
 
         sections.forEach((section, i) => {
             const iconsWrap = section.querySelector('.iconsWrap');
@@ -443,8 +444,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
                             end: "21% center",
                             scrub: false,
                             // markers: false,
+                            //markers: {startColor: 'yellow'},
                             toggleActions: "play none play reverse" // Controls the animation states
                         }
+                    });
+
+                    fadeInNewElementsTimeline.fromTo(elementsToFadeUp, {
+                        opacity: 1,
+                        y: 0,
+                    }, {
+                        opacity: 0,
+                        y: -50,
+                        duration: 0.5,
                     });
 
                     fadeInNewElementsTimeline.fromTo(elementsToFadeIn, {
